@@ -108,8 +108,8 @@ interface IOutcomeToken6909 {
     function setOperator(address spender, bool approved) external returns (bool);
 }
 
-/// @notice The collateral token (testnet tUSDC / mainnet USDso). Get testnet
-///         tokens from the faucet group: https://t.me/+XHq0F0JXMyhmMzM0
+/// @notice The collateral token. Get all testnet tokens from the faucet group:
+///         https://t.me/+XHq0F0JXMyhmMzM0
 interface IERC20Like {
     function balanceOf(address account) external view returns (uint256);
     function approve(address spender, uint256 amount) external returns (bool);
