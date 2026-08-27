@@ -48,6 +48,6 @@ forge script script/Lifecycle.s.sol --sig "redeem()" --broadcast --rpc-url somni
 - **orderType**: `0`=LIMIT `1`=FILL_OR_KILL `2`=IOC `3`=POST_ONLY.
 - **price**: probability in 1e6 units — `900000` = 0.90.
 - **expireNs**: NANOseconds, and must be `<= marketExpiryNs()` or it reverts.
-- A **POST_ONLY order that would cross is dropped** — `success=true`, `orderId=0`.
+- A **POST_ONLY order that would cross REVERTS** with `PostOnlyWouldCross()` — price it so it can't cross.
 
 Somnia gas is not Ethereum gas — read the root `SKILL.md` before you tune limits.

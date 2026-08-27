@@ -48,8 +48,8 @@ interface IBinaryPool {
     /// @param orderType 0=LIMIT 1=FILL_OR_KILL 2=IOC 3=POST_ONLY
     /// @param expireTimestampNs order expiry in NANOseconds; must satisfy
     ///        0 < expireTimestampNs <= marketExpiryNs() or it reverts (0xd3dea628).
-    /// @dev A POST_ONLY order that would cross the book is dropped: returns
-    ///      success=true with orderId=0. Always check the returned orderId.
+    /// @dev A POST_ONLY order that would cross the book REVERTS with
+    ///      PostOnlyWouldCross() — it does not rest. Price it so it can't cross.
     function placeBinaryOrder(
         uint8   kind,
         uint256 price,
