@@ -11,8 +11,7 @@ cp ../.env.example ../.env    # then fill in PRIVATE_KEY with a funded testnet k
 npm install
 ```
 
-Fund the wallet with testnet tUSDC (collateral) + STT (gas) from the faucet
-group: **https://t.me/+XHq0F0JXMyhmMzM0**
+Fund the wallet with testnet tUSDC (collateral) + STT (gas) from the SomniaHacks dev group (use the faucet topic): **https://t.me/+XHq0F0JXMyhmMzM0**
 
 > The scripts must run under **tsx**, not plain `node` — the SDK ships ESM with
 > extensionless imports that `node` cannot resolve. `npm run ...` already uses tsx.

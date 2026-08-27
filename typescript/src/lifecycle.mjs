@@ -2,7 +2,7 @@
 // hackathon is built on. Your app is whatever you wrap around these calls.
 //
 //   mintSet -> 1 collateral becomes 1 "Up" + 1 "Down" token
-//              (fund the wallet with testnet tUSDC + STT first — faucet group:
+//              (fund the wallet with testnet tUSDC + STT first — SomniaHacks dev group (use the faucet topic):
 //               https://t.me/+XHq0F0JXMyhmMzM0)
 //   place   -> rest a maker order, then cross it with a taker order
 //   (later) -> redeem the winning side after the market resolves (redeem.mjs)
@@ -46,7 +46,7 @@ const show = (label, [u, d]) => console.log(`${label}  Up=${Number(u) / 1e6}  Do
 
 // --- 3. mint a set: 4 collateral -> 4 Up + 4 Down.
 //     Needs testnet tUSDC (+ STT for gas) already in the wallet. Get testnet
-//     tokens from the faucet group: https://t.me/+XHq0F0JXMyhmMzM0
+//     tokens from the SomniaHacks dev group (use the faucet topic): https://t.me/+XHq0F0JXMyhmMzM0
 show("before ", await bal());
 let mint;
 try {
@@ -54,7 +54,7 @@ try {
 } catch (e) {
   console.error(
     "\nmintSet failed — is the wallet funded with testnet tUSDC + STT?\n" +
-      "Get testnet tokens from the faucet group: https://t.me/+XHq0F0JXMyhmMzM0\n"
+      "Get testnet tokens from the SomniaHacks dev group (use the faucet topic): https://t.me/+XHq0F0JXMyhmMzM0\n"
   );
   throw e;
 }

@@ -33,7 +33,7 @@ contract Lifecycle is Script {
         IERC20Like collateral = IERC20Like(p.collateralToken);
 
         // Fund the wallet with testnet tUSDC (+ STT for gas) first — get testnet
-        // tokens from the faucet group: https://t.me/+XHq0F0JXMyhmMzM0
+        // tokens from the SomniaHacks dev group (use the faucet topic): https://t.me/+XHq0F0JXMyhmMzM0
 
         // 1. deposit collateral into the pool so you can trade against it
         collateral.approve(address(pool), type(uint256).max);

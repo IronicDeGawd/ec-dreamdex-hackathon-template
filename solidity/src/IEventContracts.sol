@@ -108,7 +108,7 @@ interface IOutcomeToken6909 {
     function setOperator(address spender, bool approved) external returns (bool);
 }
 
-/// @notice The collateral token. Get all testnet tokens from the faucet group:
+/// @notice The collateral token. Get all testnet tokens from the SomniaHacks dev group (use the faucet topic):
 ///         https://t.me/+XHq0F0JXMyhmMzM0
 interface IERC20Like {
     function balanceOf(address account) external view returns (uint256);

@@ -24,8 +24,7 @@ what the judges score.
   tUSDC+STT    1 Up+1 Down  on the order book              to Up or Down        side → USDC
 ```
 
-Fund your wallet with testnet tUSDC (collateral) and STT (gas) from the faucet
-group: **https://t.me/+XHq0F0JXMyhmMzM0**
+Fund your wallet with testnet tUSDC (collateral) and STT (gas) from the SomniaHacks dev group (use the faucet topic): **https://t.me/+XHq0F0JXMyhmMzM0**
 
 - **Up / Down** are the two outcome tokens (ERC-6909). One collateral mints one of each.
 - **Price = probability**, in millionths: `900000` = 0.90 = "90% chance".
@@ -42,8 +41,7 @@ npm run lifecycle              # mint -> maker -> taker, prints every step
 npm run redeem                 # after the window expires, claim the winner
 ```
 
-Shannon testnet is **chain 50312**. Get testnet tUSDC + STT from the faucet
-group: **https://t.me/+XHq0F0JXMyhmMzM0**
+Shannon testnet is **chain 50312**. Get testnet tUSDC + STT from the SomniaHacks dev group (use the faucet topic): **https://t.me/+XHq0F0JXMyhmMzM0**
 
 ## Ideas worth building
 
@@ -72,7 +70,7 @@ Pick one, make it real, make it usable. Don't ship the loop below with a logo on
 - **markets-sdk (npm)** — https://www.npmjs.com/package/@somnia-chain/markets-sdk
 - **DreamDEX app (Event Contracts)** — https://app.dreamdex.io/event-contracts
 - **Somnia docs** — https://docs.somnia.network
-- **Testnet tokens (faucet TG group)** — https://t.me/+XHq0F0JXMyhmMzM0
+- **Testnet tokens (SomniaHacks dev group — faucet topic)** — https://t.me/+XHq0F0JXMyhmMzM0
 
 ## What's verified
 

@@ -25,7 +25,7 @@ losing token is worth zero. You trade the tokens on an order book in between.
 ## The lifecycle (this is the whole primitive)
 
 0. **fund** — the wallet needs testnet tUSDC (collateral) + STT (gas). Get them
-   from the faucet group: https://t.me/+XHq0F0JXMyhmMzM0
+   from the SomniaHacks dev group (use the faucet topic): https://t.me/+XHq0F0JXMyhmMzM0
 1. **mintSet** — 1 collateral → 1 Up + 1 Down. (**burnSet** merges them back.)
 2. **placeOrder** — rest a maker order or cross with a taker; buy/sell Up or Down.
 3. **resolve** — after the window's expiry the market finalizes to Up or Down.
