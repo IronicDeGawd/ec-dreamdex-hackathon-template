@@ -15,9 +15,10 @@
 import { marketCreatorEventsAbi } from "../node_modules/@somnia-chain/markets-sdk/dist/eventsAbi.js";
 import { probabilityToPrice } from "@somnia-chain/markets-sdk";
 import { writeFileSync } from "fs";
-import { ex, pub, me, ONE } from "./client.mjs";
+import { ex, pub, me, ONE, COLLATERAL } from "./client.mjs";
 
-// --- 1. discover the shortest live window (resolves soonest = best for a demo)
+// --- 1. discover the shortest live window (resolves soonest = best for a demo),
+//        scoped to the collateral you can actually get.
 const mc = marketCreatorEventsAbi.find((e) => e.name === "MarketCreated");
 const now = Math.floor(Date.now() / 1000);
 const head = await pub.getBlockNumber();
@@ -30,14 +31,18 @@ for (let i = 0; i < 40; i++) {
   } catch {}
 }
 const market = all
-  .filter((m) => Number(m.expiry) > now + 120) // leave a small buffer before expiry
+  .filter((m) => Number(m.expiry) > now + 120 && m.collateral?.toLowerCase() === COLLATERAL.toLowerCase())
   .sort((a, b) => Number(a.intervalSec) - Number(b.intervalSec) || Number(a.expiry) - Number(b.expiry))[0];
-if (!market) throw new Error("No live market found. Try again in a minute.");
+if (!market) throw new Error("No live market found on the canonical venue. Try again in a minute.");
 const { pool, marketId, asset, expiry } = market;
 console.log(`Market: ${asset}  pool=${pool}  expires in ${Math.round((Number(expiry) - now) / 60)}min\n`);
 
-// --- 2. read the market so we know the outcome-token ids
+// --- 2. read the market so we know the outcome-token ids, and confirm it's
+//        actually open for trading (not locked/settling/finalized).
 const mo = await ex.client.getMarketOnchain(marketId);
+if (mo.finalized || mo.status !== 1) {
+  throw new Error(`Market is not trading (status=${mo.status}, finalized=${mo.finalized}) — run again to pick another.`);
+}
 const bal = async () => [
   await ex.client.getOutcomeBalance({ outcomeToken: mo.outcomeToken, account: me, id: BigInt(mo.yesId) }),
   await ex.client.getOutcomeBalance({ outcomeToken: mo.outcomeToken, account: me, id: BigInt(mo.noId) }),
@@ -61,15 +66,19 @@ try {
 console.log(`mintSet  ${mint.hash}`);
 show("minted ", await bal());
 
-// --- 4. rest a maker order (PostOnly): sell 2 Up at 0.90
-const maker = await ex.trader.placeOrder({
-  pool,
-  side: "SELL_YES",
-  price: probabilityToPrice(0.9),
-  quantity: 2n * ONE,
-  orderType: 3,
-});
-console.log(`maker    orderId=${maker.orderId}  (resting SELL Up @ 0.90)`);
+// --- 4. rest a maker order (PostOnly) priced ABOVE the best bid so it rests
+//        instead of crossing. A PostOnly that WOULD cross reverts with
+//        PostOnlyWouldCross() — we catch that and carry on to the taker.
+const bids = await ex.client.getAllOpenOrdersOnchain(pool, { isBid: true });
+const bestBid = Math.max(0, ...(bids.orders || []).map((o) => Number(o.price)));
+const makerProb = bestBid ? Math.min(bestBid / 1e6 + 0.05, 0.99) : 0.9;
+let maker = {};
+try {
+  maker = await ex.trader.placeOrder({ pool, side: "SELL_YES", price: probabilityToPrice(makerProb), quantity: 2n * ONE, orderType: 3 });
+  console.log(`maker    ${maker.orderId ? `resting SELL Up @ ${makerProb.toFixed(2)} (orderId=${maker.orderId})` : "returned no orderId"}`);
+} catch (e) {
+  console.log(`maker    did not rest (${(e.shortMessage || e.message || "").split("\n")[0]}) — book too tight; continuing`);
+}
 
 // --- 5. cross it with a taker order (IOC): buy 1 Up at up to 0.99
 const taker = await ex.trader.placeOrder({

@@ -78,8 +78,8 @@ The TypeScript flow was run end-to-end on Shannon testnet (mint → maker → ta
 cancel → settle → redeem) with real tx hashes, and the collateral balance
 reconciles to the cent. The Solidity interfaces are verified against the deployed
 pool; the Foundry script is a reference template you point at a live market. SDK
-is pinned to a known-good version — bump it once you've confirmed the newer
-method shapes.
+is pinned to `^0.28.1` (current latest; imports under plain `node`, and a
+crossing PostOnly reverts rather than silently failing).
 
 ## License
 

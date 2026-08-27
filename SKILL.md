@@ -63,14 +63,22 @@ resolution via `IBinaryMarket.isResolved` / `payoutNumerators`.
 
 ## Gotchas
 
-- **PostOnly that would cross is dropped silently** — returns `success:true`,
-  `orderId` undefined / `0`. Always check the returned orderId.
+- **A PostOnly that would cross REVERTS** with `PostOnlyWouldCross()` and the SDK
+  throws — it does not silently rest. Price the order so it can't cross (for a
+  SELL, above the best bid), or wrap the call and handle the revert.
+- **Markets can span more than one venue.** `MarketCreated` carries no venueId,
+  but it does carry the collateral token — scope discovery to the canonical
+  collateral (`SOMNIA_TESTNET_ADDRESSES.testUsdc`) so you only trade markets you
+  can actually fund.
+- **Check status before trading.** An expiry in the future doesn't mean the market
+  is open — confirm `getMarketOnchain().status`/`finalized` first.
 - **The indexer can be down.** Anything indexer-backed (`loadMarkets`,
   `listBinaryMarkets`, unified `createOrder`) may fail. Discover markets from
   `MarketCreated` chain logs and read state on-chain instead — that path never
   depends on the indexer.
-- **Run the SDK under `tsx`, not `node`** — it ships ESM with extensionless
-  imports that plain `node` cannot resolve (`ERR_MODULE_NOT_FOUND`).
+- **Pin SDK ≥ 0.28.1.** Older builds (≤ 0.27) can't be imported by plain `node`
+  (`ERR_MODULE_NOT_FOUND: dist/errors`) and need `tsx`; 0.28+ imports under node.
+  `tsx` still works and is used here.
 - **`loadMarkets()` throws without `wsRpcUrl`** — always pass it.
 - **A market only settles after its expiry.** Don't poll `redeem` before then;
   short windows (15min) are easiest for a demo.

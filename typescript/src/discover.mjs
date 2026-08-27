@@ -8,7 +8,7 @@
 // reach into dist directly (relative to node_modules, resolved from the package
 // root where `npm run` sets the cwd).
 import { marketCreatorEventsAbi } from "../node_modules/@somnia-chain/markets-sdk/dist/eventsAbi.js";
-import { pub } from "./client.mjs";
+import { pub, COLLATERAL } from "./client.mjs";
 
 const marketCreated = marketCreatorEventsAbi.find((e) => e.name === "MarketCreated");
 const now = Math.floor(Date.now() / 1000);
@@ -26,9 +26,12 @@ for (let i = 0; i < 40; i++) {
   }
 }
 
-// Keep only markets that have not expired yet.
+// Keep markets that (a) haven't expired and (b) settle in the collateral you can
+// actually get (there can be more than one venue; only the canonical-collateral
+// one is tradable with faucet tokens). MarketCreated carries no venueId, but it
+// does carry the collateral token — that's enough to scope.
 const live = found
-  .filter((m) => Number(m.expiry) > now)
+  .filter((m) => Number(m.expiry) > now && m.collateral?.toLowerCase() === COLLATERAL.toLowerCase())
   .sort((a, b) => Number(a.expiry) - Number(b.expiry));
 
 console.log(`Found ${found.length} MarketCreated events, ${live.length} still live.\n`);

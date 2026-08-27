@@ -13,8 +13,8 @@ npm install
 
 Fund the wallet with testnet tUSDC (collateral) + STT (gas) from the SomniaHacks dev group (use the faucet topic): **https://t.me/+XHq0F0JXMyhmMzM0**
 
-> The scripts must run under **tsx**, not plain `node` — the SDK ships ESM with
-> extensionless imports that `node` cannot resolve. `npm run ...` already uses tsx.
+> `npm run ...` runs the scripts under **tsx**. SDK ≥ 0.28.1 also imports under
+> plain `node`; older builds (≤ 0.27) don't, which is why tsx is the default here.
 
 ## Run
 
@@ -44,8 +44,12 @@ npm run redeem       # (after the window expires) claim the winning side
 
 ## Gotchas worth knowing before you burn an afternoon
 
-- A **PostOnly order that would cross the book is silently dropped** — you get
-  `success: true` but `orderId: undefined`. Check for the orderId.
+- A **PostOnly order that would cross the book reverts** with `PostOnlyWouldCross()`
+  and the SDK throws — it doesn't rest. `lifecycle.mjs` prices the maker above the
+  best bid so it rests, and wraps the call anyway.
+- **Markets can span more than one venue.** Discovery here scopes to the canonical
+  collateral (`SOMNIA_TESTNET_ADDRESSES.testUsdc`) so you only get markets you can
+  fund, and checks `getMarketOnchain` status before trading.
 - **The indexer can be down.** Anything that reads from it (`loadMarkets`,
   `listBinaryMarkets`) may fail — the discovery + read scripts here fall back to
   on-chain logs so you are never blocked.
