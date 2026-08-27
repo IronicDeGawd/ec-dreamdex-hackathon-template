@@ -1,0 +1,20 @@
+{
+  "name": "event-contracts-starter-ts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal TypeScript starter for DreamDEX Event Contracts on Somnia Shannon testnet.",
+  "scripts": {
+    "discover": "tsx src/discover.mjs",
+    "lifecycle": "tsx src/lifecycle.mjs",
+    "redeem": "tsx src/redeem.mjs"
+  },
+  "dependencies": {
+    "@somnia-chain/markets-sdk": "0.25.0",
+    "dotenv": "^16.4.5",
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
+  }
+}

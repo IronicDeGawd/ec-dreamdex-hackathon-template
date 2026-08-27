@@ -1,0 +1,9 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.24"
+evm_version = "cancun"   # Somnia's EVM baseline
+
+[rpc_endpoints]
+somnia_testnet = "https://dream-rpc.somnia.network"
