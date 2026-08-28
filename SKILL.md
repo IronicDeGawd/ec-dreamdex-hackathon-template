@@ -66,10 +66,12 @@ resolution via `IBinaryMarket.isResolved` / `payoutNumerators`.
 - **A PostOnly that would cross REVERTS** with `PostOnlyWouldCross()` and the SDK
   throws — it does not silently rest. Price the order so it can't cross (for a
   SELL, above the best bid), or wrap the call and handle the revert.
-- **Markets can span more than one venue.** `MarketCreated` carries no venueId,
-  but it does carry the collateral token — scope discovery to the canonical
-  collateral (`SOMNIA_TESTNET_ADDRESSES.testUsdc`) so you only trade markets you
-  can actually fund.
+- **Scope discovery by collateral, not venue.** `MarketCreated` carries no venueId,
+  so there is nothing to filter venues on. Instead filter by the collateral token
+  (`SOMNIA_TESTNET_ADDRESSES.testUsdc`) so you only trade markets you can actually
+  fund. Note this doesn't isolate a single venue — testnet venues share this
+  collateral — but on testnet every live market is on the DreamDEX venue, so it's
+  enough today.
 - **Check status before trading.** An expiry in the future doesn't mean the market
   is open — confirm `getMarketOnchain().status`/`finalized` first.
 - **The indexer can be down.** Anything indexer-backed (`loadMarkets`,

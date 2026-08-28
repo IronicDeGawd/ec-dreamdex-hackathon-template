@@ -33,7 +33,7 @@ for (let i = 0; i < 40; i++) {
 const market = all
   .filter((m) => Number(m.expiry) > now + 120 && m.collateral?.toLowerCase() === COLLATERAL.toLowerCase())
   .sort((a, b) => Number(a.intervalSec) - Number(b.intervalSec) || Number(a.expiry) - Number(b.expiry))[0];
-if (!market) throw new Error("No live market found on the canonical venue. Try again in a minute.");
+if (!market) throw new Error("No live market found in your collateral (tUSDC). Try again in a minute.");
 const { pool, marketId, asset, expiry } = market;
 console.log(`Market: ${asset}  pool=${pool}  expires in ${Math.round((Number(expiry) - now) / 60)}min\n`);
 

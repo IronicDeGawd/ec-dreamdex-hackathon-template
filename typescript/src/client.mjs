@@ -9,23 +9,24 @@ import { config } from "dotenv";
 // Load the .env at the repo root, regardless of where the script is run from.
 config({ path: new URL("../../.env", import.meta.url) });
 
-const { PRIVATE_KEY, RPC_URL, WS_RPC_URL, INDEXER_URL } = process.env;
+const { PRIVATE_KEY, RPC_URL, WS_RPC_URL } = process.env;
 
 if (!PRIVATE_KEY || PRIVATE_KEY === "0x...") {
   throw new Error("Set PRIVATE_KEY in .env (a funded Shannon testnet key).");
 }
-if (!INDEXER_URL) {
-  // The SDK requires an indexer URL at construction. Every read/write in this
-  // starter is on-chain, so the value is never actually called here — but you
-  // must supply one. Get the endpoint from the DreamDEX docs (or use your own).
-  throw new Error("Set INDEXER_URL in .env — see https://docs.dreamdex.io/developers/event-contracts");
-}
+
+// The SDK requires an indexer URL at construction. Every read/write in this
+// starter is on-chain, so the value is never actually called here — but one must
+// be supplied. Defaults to the public Shannon testnet indexer (published in the
+// markets-sdk README); override INDEXER_URL in .env to point at your own.
+const INDEXER_URL = process.env.INDEXER_URL || "https://dev.smk.somnia.host/v1/graphql";
 
 // Your address, derived from the key. Used to read your own balances/orders.
 export const me = privateKeyToAccount(PRIVATE_KEY).address;
 
-// Canonical testnet collateral — used to scope market discovery to the venue
-// whose tokens you can actually get (see discover.mjs).
+// Testnet collateral (tUSDC) — used to scope market discovery to markets you can
+// actually fund from the faucet. This filters by collateral, not by venue (see
+// discover.mjs).
 export const COLLATERAL = SOMNIA_TESTNET_ADDRESSES.testUsdc;
 
 // A read-only chain client for raw log/state reads the SDK does not cover.

@@ -27,9 +27,10 @@ for (let i = 0; i < 40; i++) {
 }
 
 // Keep markets that (a) haven't expired and (b) settle in the collateral you can
-// actually get (there can be more than one venue; only the canonical-collateral
-// one is tradable with faucet tokens). MarketCreated carries no venueId, but it
-// does carry the collateral token — that's enough to scope.
+// actually get from the faucet (tUSDC). MarketCreated carries no venueId, so this
+// scopes by collateral, not venue — it filters to markets you can fund, not to a
+// single venue. On testnet every live market is on the DreamDEX venue and shares
+// this collateral, so that's enough today.
 const live = found
   .filter((m) => Number(m.expiry) > now && m.collateral?.toLowerCase() === COLLATERAL.toLowerCase())
   .sort((a, b) => Number(a.expiry) - Number(b.expiry));
